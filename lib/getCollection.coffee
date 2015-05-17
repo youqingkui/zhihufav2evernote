@@ -37,44 +37,71 @@ class GetCol
       checkList:['getList', (cb, result) ->
         data = result.getList
         if data.data.length
-          answerList = data.data
-          answerList.forEach (answer) ->
-            Task.findOne {url:answer.url}, (err, row) ->
-              return txErr url, 5, {err:err, answer:answer.url, fun:'checkList'} if err
+          async.eachSeries data.data, (item, callback) ->
+            Task.findOne {url:item.url}, (err, row) ->
+              return txErr url, 5, {err:err, answer:item.url, fun:'checkList'} if err
 
               if row
-                console.log "already exits ==>", answer.url
+                console.log "already exits ==>", item.url
+                callback()
 
               else
-                self.addTask answer.url
+                self.addDB item.url, callback
 
-          self.getColList(data.paging.next)
+
+          ,() ->
+            self.getColList(data.paging.next)
 
         else
           console.log data
+          cb()
+
+      ]
+
+
+      getTasks:['checkList', (cb) ->
+        Task.find {status:1}, (err, rows) ->
+          return txErr "", 5, {err:err, fun:'getTasks'}
+
+          cb(null, rows)
+      ]
+
+      addDo:['getTasks', (cb, result) ->
+        tasks = result.getTasks
+        async.eachSeries tasks, (item, callback) ->
+          queue.push {url:url, noteStore:self.noteStore, noteBook:self.noteBook}, (err) ->
+            if err
+              return txErr url, 6, {err:err, fun:'addDo'}
 
       ]
 
 
 
+  addDB:(url, callback) ->
+    task = new Task
+    task.url = url
+    task.save (err, row) ->
+      return txErr url, 5, {err:err, fun:'addDB'} if err
 
-  addTask:(url) ->
-    self = @
-    async.auto
-      addDB:(callback) ->
-        task = new Task
-        task.url = url
-        task.save (err, row) ->
-          return txErr url, 5, {err:err, fun:'addDB'} if err
+      callback()
 
-          callback()
-
-      addDo:['addDB', (callback) ->
-        queue.push {url:url, noteStore:self.noteStore, noteBook:self.noteBook}, (err) ->
-          if err
-            return txErr url, 6, {err:err, fun:'addDo'}
-
-      ]
+#  addTask:(url) ->
+#    self = @
+#    async.auto
+#      addDB:(callback) ->
+#        task = new Task
+#        task.url = url
+#        task.save (err, row) ->
+#          return txErr url, 5, {err:err, fun:'addDB'} if err
+#
+#          callback()
+#
+#      addDo:['addDB', (callback) ->
+#        queue.push {url:url, noteStore:self.noteStore, noteBook:self.noteBook}, (err) ->
+#          if err
+#            return txErr url, 6, {err:err, fun:'addDo'}
+#
+#      ]
 
   changeStatus: (url, status, cb) ->
     async.auto

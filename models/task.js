@@ -8,7 +8,8 @@
     url: String,
     status: {
       type: Number,
-      "default": 1
+      "default": 1,
+      unique: true
     }
   });
 
