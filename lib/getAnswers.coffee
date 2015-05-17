@@ -72,8 +72,8 @@ class GetAnswer
           data.question.id + '/answer/' + data.id
 
       self.content = data.content
-      self.created = data.created_time
-      self.updated = data.updated_time
+      self.created = Date.now / 1000
+#      self.updated = data.updated_time
 
       cb()
 
