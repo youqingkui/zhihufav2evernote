@@ -9,8 +9,6 @@ txErr = (href, type, infoJson, cb) ->
   log.type = type
   log.info = JSON.stringify(infoJson)
 
-  log.save (err, row) ->
-    return console.log err if err
 
   emailBody = JSON.stringify(log)
   email.send(emailBody)
