@@ -9,7 +9,7 @@ txErr = require('./txErr')
 
 q = async.queue (data, cb) ->
   console.log "#{data.url} now do"
-  g = new GetAnswer(data.url, data.noteStore)
+  g = new GetAnswer(data.url, data.noteStore, data.noteBook)
   async.series [
 
     (callback) ->
@@ -45,7 +45,7 @@ q.drain = () ->
 
 
 class GetAnswer
-  constructor:(@url, @noteStore) ->
+  constructor:(@url, @noteStore, @noteBook) ->
     @headers = {
       'User-Agent':'osee2unifiedRelease/332 CFNetwork/711.3.18 Darwin/14.0.0'
       'Authorization':'oauth 5774b305d2ae4469a2c9258956ea49'
@@ -116,7 +116,7 @@ class GetAnswer
   createNote: (cb) ->
     self = @
     makeNote @noteStore, @title, @tagArr, @enContent, @sourceUrl, @resourceArr,
-      @created, @updated
+      @created, @updated, @noteBook
       (err, note) ->
         if err
           return txErr(self.url, 3, {err:err, title:self.title}, cb) if err

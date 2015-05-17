@@ -4,7 +4,7 @@ email = require('./email')()
 txErr = (href, type, infoJson, cb) ->
   console.log infoJson.err
 
-  log = new ErrLog()
+  log = {}
   log.href = href
   log.type = type
   log.info = JSON.stringify(infoJson)

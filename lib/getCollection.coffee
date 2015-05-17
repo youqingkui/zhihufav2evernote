@@ -9,7 +9,7 @@ Task = require('../models/task')
 
 
 class GetCol
-  constructor:(@noteStore) ->
+  constructor:(@noteStore, @noteBook) ->
     @headers = {
       'User-Agent':'osee2unifiedRelease/332 CFNetwork/711.3.18 Darwin/14.0.0'
       'Authorization':'oauth 5774b305d2ae4469a2c9258956ea49'
@@ -70,7 +70,7 @@ class GetCol
           callback()
 
       addDo:['addDB', (callback) ->
-        queue.push {url:url, noteStore:self.noteStore}, (err) ->
+        queue.push {url:url, noteStore:self.noteStore, noteBook:self.noteBook}, (err) ->
           if err
             return txErr url, 6, {err:err, fun:'addDo'}
 
