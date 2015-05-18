@@ -60,7 +60,7 @@ class GetCol
 
 
       getTasks:['checkList', (cb) ->
-        Task.find {status:1}, (err, rows) ->
+        Task.find {status:1}, null, {sort: {_id: -1}}, (err, rows) ->
           return txErr url, 5, {err:err, fun:'getTasks'} if err
 
           cb(null, rows)
