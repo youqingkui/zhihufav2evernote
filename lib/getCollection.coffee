@@ -61,7 +61,7 @@ class GetCol
 
       getTasks:['checkList', (cb) ->
         Task.find {status:1}, (err, rows) ->
-          return txErr "", 5, {err:err, fun:'getTasks'}
+          return txErr url, 5, {err:err, fun:'getTasks'} if err
 
           cb(null, rows)
       ]
@@ -69,9 +69,14 @@ class GetCol
       addDo:['getTasks', (cb, result) ->
         tasks = result.getTasks
         async.eachSeries tasks, (item, callback) ->
-          queue.push {url:url, noteStore:self.noteStore, noteBook:self.noteBook}, (err) ->
+          queue.push {url:item.url, noteStore:self.noteStore, noteBook:self.noteBook}, (err) ->
             if err
-              return txErr url, 6, {err:err, fun:'addDo'}
+              return txErr item.url, 6, {err:err, fun:'addDo'}
+
+            self.changeStatus(item.url, 2)
+
+
+          callback()
 
       ]
 
@@ -103,22 +108,25 @@ class GetCol
 #
 #      ]
 
-  changeStatus: (url, status, cb) ->
+  changeStatus: (url, status) ->
     async.auto
       findUrl:(callback) ->
         Task.findOne {url:url}, (err, row) ->
-          return cb(err, status) if err
+          return txErr url, 5, {err:err, fun:'changeStatus-findUrl'} if err
 
-          callback(null, row) if row
+          if not row
+            return txErr url, 7, {err:"没有找到url", fun:'changeStatus-findUrl'}
+
+          else
+            callback(null, row)
 
 
       change:['findUrl', (callback, result) ->
         row = result.findUrl
         row.status = status
         row.save (err, row) ->
-          return cb(err) if err
+          return txErr "", 5, {err:err, fun:"changeStatus-change"} if err
 
-          cb(null, status)
       ]
 
 

@@ -5,11 +5,13 @@
   mongoose = require('./mongoose');
 
   TaskSchema = mongoose.Schema({
-    url: String,
+    url: {
+      type: String,
+      unique: true
+    },
     status: {
       type: Number,
-      "default": 1,
-      unique: true
+      "default": 1
     }
   });
 
