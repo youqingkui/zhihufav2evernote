@@ -18,6 +18,8 @@ class GetCol
 
 
 
+
+
   getColList:(url) ->
     self = @
     op = {
@@ -68,6 +70,7 @@ class GetCol
 
       addDo:['getTasks', (cb, result) ->
         tasks = result.getTasks
+        console.log "[addDo] self.noteBook", self.noteBook, self.url
         async.eachSeries tasks, (item, callback) ->
           queue.push {url:item.url, noteStore:self.noteStore, noteBook:self.noteBook}, (err) ->
             if err

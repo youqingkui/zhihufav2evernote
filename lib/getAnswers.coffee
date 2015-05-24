@@ -8,7 +8,7 @@ txErr = require('./txErr')
 
 
 q = async.queue (data, cb) ->
-  console.log "#{data.url} now do"
+  console.log "#{data.url}  #{data.noteBook} now do"
   g = new GetAnswer(data.url, data.noteStore, data.noteBook)
   async.series [
 
