@@ -11,14 +11,14 @@ j = schedule.scheduleJob rule, () ->
   col = [
     {
       url:'https://api.zhihu.com/collections/29469118/answers'
-      noteBook:'f082258a-fd9a-4713-98a0-d85fa838f019'
+      noteBook:'f082258a-fd9a-4713-98a0-d85fa838f019' # 知乎测试
     }
-    {
-      url:'https://api.zhihu.com/collections/19932288/answers'
-      noteBook:'abfa14bd-8abf-4399-a0ee-70da3b253033'
-    }
+  #  {
+  #    url:'https://api.zhihu.com/collections/19932288/answers'
+  #    noteBook:'abfa14bd-8abf-4399-a0ee-70da3b253033' # 知乎测试2
+  #  }
   ]
 
-  col.forEach (item) ->
+  col.forEach (item, v) ->
     t = new GetCol(noteStore, item.noteBook)
     t.getColList(item.url)
