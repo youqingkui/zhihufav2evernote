@@ -62,7 +62,7 @@ class GetCol
 
 
       getTasks:['checkList', (cb) ->
-        Task.find {status:1}, null, {sort: {_id: -1}}, (err, rows) ->
+        Task.find {status:1,noteBook:self.noteBook}, null, {sort: {_id: -1}}, (err, rows) ->
           return txErr url, 5, {err:err, fun:'getTasks'} if err
 
           cb(null, rows)
@@ -86,8 +86,10 @@ class GetCol
 
 
   addDB:(url, callback) ->
+    self = @
     task = new Task
     task.url = url
+    task.noteBook = self.noteBook
     task.save (err, row) ->
       return txErr url, 5, {err:err, fun:'addDB'} if err
 

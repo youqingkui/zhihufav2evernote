@@ -9,6 +9,7 @@
       type: String,
       unique: true
     },
+    noteBook: String,
     status: {
       type: Number,
       "default": 1
