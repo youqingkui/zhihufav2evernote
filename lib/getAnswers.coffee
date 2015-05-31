@@ -81,11 +81,29 @@ class GetAnswer
   changeContent: (cb) ->
     self = @
     $ = cheerio.load(self.content, {decodeEntities: false})
-    $("a, span, img, i, div, code")
+    $("*")
     .map (i, elem) ->
-      for k of elem.attribs
-        if k != 'data-actualsrc' and k != 'src'
+      for k, v of elem.attribs
+        if k != 'data-actualsrc' and k != 'src' and k !='href' and k != 'style'
           $(this).removeAttr(k)
+
+        if k is 'href'
+          if !self.checkUrl(v)
+            $(this).removeAttr(k)
+
+    $("iframe").remove()
+
+    $("article").each () ->
+      $(this).replaceWith('<div>'+ $(this).html()+ '</div>')
+
+    $("section").each () ->
+      $(this).replaceWith('<div>'+ $(this).html()+ '</div>')
+
+    $("header").each () ->
+      $(this).replaceWith('<div>'+ $(this).html()+ '</div>')
+
+    $("noscript").each () ->
+      $(this).replaceWith('<div>'+ $(this).html()+ '</div>')
 
     imgs = $("img")
     console.log "#{self.title} find img length => #{imgs.length}"
@@ -165,6 +183,25 @@ class GetAnswer
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.90 Safari/537.36',
 
     return options
+
+  checkUrl:(href) ->
+    strRegex = "^((https|http|ftp|rtsp|mms)?://)"
+    + "?(([0-9a-z_!~*'().&=+$%-]+: )?[0-9a-z_!~*'().&=+$%-]+@)?"
+    + "(([0-9]{1,3}/.){3}[0-9]{1,3}" + "|"
+    + "([0-9a-z_!~*'()-]+/.)*"
+    + "([0-9a-z][0-9a-z-]{0,61})?[0-9a-z]/."
+    + "[a-z]{2,6})"
+    + "(:[0-9]{1,4})?"
+    + "((/?)|"
+    + "(/[0-9a-z_!~*'().;?:@&=+$,%#-]+)+/?)$"
+
+    re = new RegExp(strRegex)
+    if re.test href
+      return true
+
+    else
+      return false
+
 
 
 module.exports = q
