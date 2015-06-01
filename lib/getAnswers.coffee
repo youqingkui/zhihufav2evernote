@@ -66,7 +66,7 @@ class GetAnswer
       return txErr(op.url, 1, {err:err, fun:'getContent'},cb) if err
 
       data = JSON.parse(body)
-      self.title = data.question.title
+      self.title = data.question.title.trim()
       self.tagArr = []
       self.sourceUrl = 'http://www.zhihu.com/question/'+
           data.question.id + '/answer/' + data.id
