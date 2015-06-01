@@ -67,6 +67,7 @@ class GetAnswer
 
       data = JSON.parse(body)
       self.title = data.question.title.trim()
+      console.log "title ==>", self.title
       self.tagArr = []
       self.sourceUrl = 'http://www.zhihu.com/question/'+
           data.question.id + '/answer/' + data.id
