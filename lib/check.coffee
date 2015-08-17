@@ -94,7 +94,7 @@ class Check
 
 
 url = 'https://api.zhihu.com/collections/29469118/answers'
-noteBook = 'f082258a-fd9a-4713-98a0-d85fa838f019'
+noteBook = '44fcb5a8-e24c-406e-aa84-fc67354fb630'
 c = new Check(url, noteBook)
 c.getList()
 

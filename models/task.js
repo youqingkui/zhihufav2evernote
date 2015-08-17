@@ -15,12 +15,13 @@
       "default": 1
     },
     id: {
-      type: Number,
-      unique: true
+      type: Number
     },
     guid: {
-      type: String,
-      unique: true
+      type: String
+    },
+    title: {
+      type: String
     },
     created_time: {
       type: Number
