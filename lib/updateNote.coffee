@@ -9,11 +9,11 @@ updateNote = (noteStore, guid, noteTitle, noteBody, options, callback) ->
   # Create note object
   ourNote = new Evernote.Note()
   ourNote.guid = guid
-  ourNote.title = noteTitle
+  ourNote.title = noteTitle + '【UP】'
   ourNote.content = nBody
   attr = new Evernote.NoteAttributes
   if options
-    if options.sourceURL
+    if options.sourceUrl
       attr.sourceURL = options.sourceUrl
 
     if options.resources

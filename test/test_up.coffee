@@ -1,13 +1,30 @@
-PushEvernote = require('../lib/pushEvernote')
 async = require('async')
 Task = require('../models/task')
-txErr = require('../lib/txErr')
 noteStore = require('../lib/noteStore')
-updateNote = require('../lib/updateNote')
+UpdateEvernote = require('../lib/updateEvernote')
 
 
-updateNote noteStore, 'e17ef426-d9cd-445c-b133-4aa0d8a6ddea',"test-update", "update_body",{}, (err, note) ->
+async.waterfall [
+  (cb) ->
+    Task.find {status:3}, null, {sort: {_id: -1}}, (err, rows) ->
+      return txErr {err:err, fun:'TaskFind'}, callback if err
 
-  console.log err, note
+      cb(null, rows)
+
+
+  (rows, cb) ->
+    async.eachSeries rows, (item, callback) ->
+      if item.guid
+        u = new UpdateEvernote(item.url, noteStore, item.noteBook, item.guid, item)
+        u.upNote callback
+
+    ,() ->
+      console.log "# all do #"
+
+  ]
+
+
+
+
 
 
