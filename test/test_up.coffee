@@ -12,7 +12,7 @@ async.waterfall [
       cb(null, rows)
 
 
-  (rows, cb) ->
+  (rows) ->
     async.eachSeries rows, (item, callback) ->
       if item.guid
         u = new UpdateEvernote(item.url, noteStore, item.noteBook, item.guid, item)

@@ -80,7 +80,8 @@ class Check
 
     if row.updated_time and data.updated_time != row.updated_time
         row.updated_time = data.updated_time
-        row.status = 3
+        if row.status == 2
+          row.status = 3
         row.save (err) ->
           return txErr {err:err, fun:'upTask',url:data.url}, cb if err
 
