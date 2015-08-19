@@ -13,6 +13,21 @@
     status: {
       type: Number,
       "default": 1
+    },
+    id: {
+      type: Number
+    },
+    guid: {
+      type: String
+    },
+    title: {
+      type: String
+    },
+    created_time: {
+      type: Number
+    },
+    updated_time: {
+      type: Number
     }
   });
 

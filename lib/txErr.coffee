@@ -1,21 +1,18 @@
 email = require('./email')()
 
 
-txErr = (href, type, infoJson, cb) ->
+txErr = (infoJson, cb) ->
   console.log infoJson.err
 
-  log = {}
-  log.href = href
-  log.type = type
-  log.info = JSON.stringify(infoJson)
+  logInfo = ""
+  for k, v of infoJson
+    logInfo +=  k + ": " + v + "\n"
 
-
-  emailBody = JSON.stringify(log)
+  emailBody = (logInfo)
   email.send(emailBody)
 
   if cb
     return cb(infoJson.err)
-
 
 
 module.exports = txErr
