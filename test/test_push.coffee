@@ -11,12 +11,12 @@ rule1 = new schedule.RecurrenceRule()
 rule2 = new schedule.RecurrenceRule()
 
 rule1.dayOfWeek = [0, new schedule.Range(1, 6)]
-rule1.hour = 10
-rule1.minute = 0
+rule1.hour = 18
+rule1.minute = 10
 
 rule2.dayOfWeek = [0, new schedule.Range(1, 6)]
-rule2.hour = 10
-rule2.minute = 3
+rule2.hour = 18
+rule2.minute = 15
 
 
 schedule.scheduleJob rule1, () ->
