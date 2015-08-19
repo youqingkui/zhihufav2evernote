@@ -80,13 +80,16 @@ class Check
 
     if row.updated_time and data.updated_time != row.updated_time
         row.updated_time = data.updated_time
-        if row.status == 2
+        if row.status == 2 and row.guid
           row.status = 3
+          console.log "######################################"
+          console.log "【need update】 ", data.title, data.question.title
+          console.log "######################################"
         row.save (err) ->
           return txErr {err:err, fun:'upTask',url:data.url}, cb if err
 
           console.log "######################################"
-          console.log "need update ", data.question.title
+          console.log "update time", data.title, data.question.title
           console.log "######################################"
           cb()
 
@@ -94,8 +97,11 @@ class Check
         cb()
 
 
-url = 'https://api.zhihu.com/collections/29469118/answers'
-noteBook = '44fcb5a8-e24c-406e-aa84-fc67354fb630'
-c = new Check(url, noteBook)
-c.getList()
+module.exports = Check
+
+#
+#url = 'https://api.zhihu.com/collections/29469118/answers'
+#noteBook = '44fcb5a8-e24c-406e-aa84-fc67354fb630'
+#c = new Check(url, noteBook)
+#c.getList()
 

@@ -51,6 +51,8 @@ class UpdateEvernote extends PushEvernote
     updateNote noteStore, self.guid, self.title, self.enContent, options, (err, note) ->
       return txErr {err:err,fun:'updateNoteInfo',url:self.url}, cb if err
 
+      console.log "## up ok ##",self.title
+
       cb()
 
 
