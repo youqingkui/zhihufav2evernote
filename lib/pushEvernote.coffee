@@ -159,7 +159,7 @@ class PushEvernote
     self = @
     op = self.reqOp(imgUrl)
     op.encoding = 'binary'
-    op.timeout = 30
+    op.timeout = 30000
     async.auto
       readImg:(callback) ->
         request.get op, (err, res, body) ->
