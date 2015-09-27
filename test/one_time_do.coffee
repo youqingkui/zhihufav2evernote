@@ -11,16 +11,16 @@ rule1 = new schedule.RecurrenceRule()
 rule2 = new schedule.RecurrenceRule()
 
 rule1.dayOfWeek = [0, new schedule.Range(1, 6)]
-rule1.hour = 18
-rule1.minute = 10
+rule1.hour = 0
+rule1.minute = 25
 
 rule2.dayOfWeek = [0, new schedule.Range(1, 6)]
-rule2.hour = 18
-rule2.minute = 15
+rule2.hour = 0
+rule2.minute = 25
 
 
 schedule.scheduleJob rule1, () ->
-  # 检查
+# 检查
   col = [
     {
       url:'https://api.zhihu.com/collections/29469118/answers' # 知乎收藏
@@ -47,7 +47,7 @@ schedule.scheduleJob rule1, () ->
       noteBook:'a8ef249b-aa81-4f66-9d34-645aa79f1183'
     }
 
-    # 匪风 的收藏
+# 匪风 的收藏
 
     {
       url:'https://api.zhihu.com/collections/71977517/answers' # 知乎骗照三百问
@@ -103,7 +103,7 @@ schedule.scheduleJob rule1, () ->
 
 
 schedule.scheduleJob rule2, () ->
-  # 创建
+# 创建
   async.waterfall [
     (cb) ->
       Task.find {status:1}, null, {sort: {_id: -1}}, (err, rows) ->
@@ -140,4 +140,4 @@ schedule.scheduleJob rule2, () ->
       ,() ->
         console.log "# all do #"
 
-]
+  ]
