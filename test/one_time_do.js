@@ -34,118 +34,63 @@
 
   rule2.minute = 25;
 
-  schedule.scheduleJob(rule1, function() {
-    var col;
-    col = [
-      {
-        url: 'https://api.zhihu.com/collections/29469118/answers',
-        noteBook: 'f082258a-fd9a-4713-98a0-d85fa838f019'
-      }, {
-        url: 'https://api.zhihu.com/collections/30429493/answers',
-        noteBook: 'ac14ddad-cc5b-439a-82f2-2348afb9f7e0'
-      }, {
-        url: 'https://api.zhihu.com/collections/29084869/answers',
-        noteBook: '359e0882-b0a7-41bc-8437-38fe1afff418'
-      }, {
-        url: 'https://api.zhihu.com/collections/41332067/answers',
-        noteBook: 'c3c8c27b-c014-4b10-83b2-b98461affaf3'
-      }, {
-        url: 'https://api.zhihu.com/collections/21017107/answers',
-        noteBook: 'a8ef249b-aa81-4f66-9d34-645aa79f1183'
-      }, {
-        url: 'https://api.zhihu.com/collections/71977517/answers',
-        noteBook: 'ae1c443e-8b29-4952-b485-1a874423854a'
-      }, {
-        url: 'https://api.zhihu.com/collections/72869497/answers',
-        noteBook: 'd4fb8c31-466a-466e-90c5-97a85ba0757f'
-      }, {
-        url: 'https://api.zhihu.com/collections/71964508/answers',
-        noteBook: '7274ba2b-aec2-4704-92b0-95300d127ec9'
-      }, {
-        url: 'https://api.zhihu.com/collections/72869482/answers',
-        noteBook: 'fd6ab906-1f5e-43bf-8caf-d79689be274e'
-      }, {
-        url: 'https://api.zhihu.com/collections/71964476/answers',
-        noteBook: 'ec5ab000-9615-4e78-b415-d761e1d90be3'
-      }, {
-        url: 'https://api.zhihu.com/collections/72871358/answers',
-        noteBook: 'f8cee834-1e3e-45f3-9524-fb26b01d2488'
-      }, {
-        url: 'https://api.zhihu.com/collections/72107092/answers',
-        noteBook: '8da41fc3-9020-425d-b7ab-39c10253f1b1'
-      }, {
-        url: 'https://api.zhihu.com/collections/71964729/answers',
-        noteBook: 'f7dc8d77-5830-4209-bfa2-5fd09687b10d'
-      }, {
-        url: 'https://api.zhihu.com/collections/71438819/answers',
-        noteBook: '4d95c614-b935-4f9e-bf88-081a859d0ea2'
-      }
-    ];
-    return col.forEach(function(item) {
-      var c;
-      c = new Check(item.url, item.noteBook);
-      return c.getList();
-    });
-  });
+  async.waterfall([
+    function(cb) {
+      return Task.find({
+        status: 1
+      }, null, {
+        sort: {
+          _id: -1
+        }
+      }, function(err, rows) {
+        if (err) {
+          return txErr({
+            err: err,
+            fun: 'TaskFind'
+          }, callback);
+        }
+        return cb(null, rows);
+      });
+    }, function(rows, cb) {
+      return async.eachSeries(rows, function(item, callback) {
+        var p;
+        p = new PushEvernote(item.url, noteStore, item.noteBook);
+        return p.pushNote(callback);
+      }, function() {
+        return console.log("#  all do #");
+      });
+    }
+  ]);
 
-  schedule.scheduleJob(rule2, function() {
-    async.waterfall([
-      function(cb) {
-        return Task.find({
-          status: 1
-        }, null, {
-          sort: {
-            _id: -1
-          }
-        }, function(err, rows) {
-          if (err) {
-            return txErr({
-              err: err,
-              fun: 'TaskFind'
-            }, callback);
-          }
-          return cb(null, rows);
-        });
-      }, function(rows, cb) {
-        return async.eachSeries(rows, function(item, callback) {
-          var p;
-          p = new PushEvernote(item.url, noteStore, item.noteBook);
-          return p.pushNote(callback);
-        }, function() {
-          return console.log("#  all do #");
-        });
-      }
-    ]);
-    return async.waterfall([
-      function(cb) {
-        return Task.find({
-          status: 3
-        }, null, {
-          sort: {
-            _id: -1
-          }
-        }, function(err, rows) {
-          if (err) {
-            return txErr({
-              err: err,
-              fun: 'TaskFind'
-            }, callback);
-          }
-          return cb(null, rows);
-        });
-      }, function(rows) {
-        return async.eachSeries(rows, function(item, callback) {
-          var u;
-          if (item.guid) {
-            u = new UpdateEvernote(item.url, noteStore, item.noteBook, item.guid, item);
-            return u.upNote(callback);
-          }
-        }, function() {
-          return console.log("# all do #");
-        });
-      }
-    ]);
-  });
+  async.waterfall([
+    function(cb) {
+      return Task.find({
+        status: 3
+      }, null, {
+        sort: {
+          _id: -1
+        }
+      }, function(err, rows) {
+        if (err) {
+          return txErr({
+            err: err,
+            fun: 'TaskFind'
+          }, callback);
+        }
+        return cb(null, rows);
+      });
+    }, function(rows) {
+      return async.eachSeries(rows, function(item, callback) {
+        var u;
+        if (item.guid) {
+          u = new UpdateEvernote(item.url, noteStore, item.noteBook, item.guid, item);
+          return u.upNote(callback);
+        }
+      }, function() {
+        return console.log("# all do #");
+      });
+    }
+  ]);
 
 }).call(this);
 
