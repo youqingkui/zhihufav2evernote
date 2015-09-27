@@ -52,6 +52,33 @@
       }, {
         url: 'https://api.zhihu.com/collections/21017107/answers',
         noteBook: 'a8ef249b-aa81-4f66-9d34-645aa79f1183'
+      }, {
+        url: 'https://api.zhihu.com/collections/71977517/answers',
+        noteBook: 'ae1c443e-8b29-4952-b485-1a874423854a'
+      }, {
+        url: 'https://api.zhihu.com/collections/72869497/answers',
+        noteBook: 'd4fb8c31-466a-466e-90c5-97a85ba0757f'
+      }, {
+        url: 'https://api.zhihu.com/collections/71964508/answers',
+        noteBook: '7274ba2b-aec2-4704-92b0-95300d127ec9'
+      }, {
+        url: 'https://api.zhihu.com/collections/72869482/answers',
+        noteBook: 'fd6ab906-1f5e-43bf-8caf-d79689be274e'
+      }, {
+        url: 'https://api.zhihu.com/collections/71964476/answers',
+        noteBook: 'ec5ab000-9615-4e78-b415-d761e1d90be3'
+      }, {
+        url: 'https://api.zhihu.com/collections/72871358/answers',
+        noteBook: 'f8cee834-1e3e-45f3-9524-fb26b01d2488'
+      }, {
+        url: 'https://api.zhihu.com/collections/72107092/answers',
+        noteBook: '8da41fc3-9020-425d-b7ab-39c10253f1b1'
+      }, {
+        url: 'https://api.zhihu.com/collections/71964729/answers',
+        noteBook: 'f7dc8d77-5830-4209-bfa2-5fd09687b10d'
+      }, {
+        url: 'https://api.zhihu.com/collections/71438819/answers',
+        noteBook: '4d95c614-b935-4f9e-bf88-081a859d0ea2'
       }
     ];
     return col.forEach(function(item) {
