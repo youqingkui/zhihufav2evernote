@@ -72,6 +72,10 @@ class PushEvernote
       return txErr {err:err, fun:'getContent'}, cb if err
 
       data = JSON.parse(body)
+      if data.error
+        console.log self.url
+        console.log data
+        cb(data.error.message)
       self.title = data.question.title.trim()
       console.log "title ==>", self.title
       self.tagArr = []
