@@ -76,7 +76,7 @@ class PushEvernote
         console.log self.url
         console.log data
         return cb(data.error.message)
-      self.title = data.question.title.trim()
+      self.title = data.question.title.trim().replace("\n", "")
       console.log "title ==>", self.title
       self.tagArr = []
       self.sourceUrl = 'http://www.zhihu.com/question/'+
