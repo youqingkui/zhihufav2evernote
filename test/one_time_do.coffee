@@ -7,20 +7,6 @@ UpdateEvernote = require('../lib/updateEvernote')
 Check = require('../lib/check')
 schedule = require("node-schedule")
 
-rule1 = new schedule.RecurrenceRule()
-rule2 = new schedule.RecurrenceRule()
-
-rule1.dayOfWeek = [0, new schedule.Range(1, 6)]
-rule1.hour = 0
-rule1.minute = 25
-
-rule2.dayOfWeek = [0, new schedule.Range(1, 6)]
-rule2.hour = 0
-rule2.minute = 25
-
-
-#schedule.scheduleJob rule1, () ->
-## 检查
 col = [
   {
     url:'https://api.zhihu.com/collections/29469118/answers' # 知乎收藏
@@ -96,23 +82,14 @@ col = [
   }
 
 ]
-#
-#  col.forEach (item) ->
-#    c = new Check(item.url, item.noteBook)
-#    c.getList()
-#
-#
-#schedule.scheduleJob rule2, () ->
-# 创建
+
 async.waterfall [
 
   (cb) ->
-    col.forEach (item) ->
+
+    async.eachSeries col, (item, callback) ->
       c = new Check(item.url, item.noteBook)
-      c.getList()
-
-    cb()
-
+      c.getList(item.url, callback)
 
   (cb) ->
     Task.find {status:1}, null, {sort: {_id: -1}}, (err, rows) ->
@@ -122,31 +99,37 @@ async.waterfall [
 
 
   (rows, cb) ->
+    ### 创建 ###
     async.eachSeries rows, (item, callback) ->
       p = new PushEvernote(item.url, noteStore, item.noteBook)
       p.pushNote callback
 
     ,() ->
       console.log "#  all do #"
-    # 更新
-      async.waterfall [
-        (cb) ->
-          Task.find {status:3}, null, {sort: {_id: -1}}, (err, rows) ->
-            return txErr {err:err, fun:'TaskFind'}, callback if err
-
-            cb(null, rows)
+      cb()
 
 
-        (rows) ->
-          async.eachSeries rows, (item, callback) ->
-            if item.guid
-              u = new UpdateEvernote(item.url, noteStore, item.noteBook, item.guid, item)
-              u.upNote callback
+  (cb) ->
+    ### 更新 ###
+    async.waterfall [
+      (cb) ->
+        Task.find {status:3}, null, {sort: {_id: -1}}, (err, rows) ->
+          return txErr {err:err, fun:'TaskFind'}, callback if err
 
-          ,() ->
-            console.log "# all do up #"
+          cb(null, rows)
 
-      ]
+
+      (rows) ->
+        async.eachSeries rows, (item, callback) ->
+          if item.guid
+            u = new UpdateEvernote(item.url, noteStore, item.noteBook, item.guid, item)
+            u.upNote callback
+
+        ,() ->
+          console.log "# all do up #"
+
+    ]
+
 ]
 
 

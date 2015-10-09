@@ -11,7 +11,7 @@ class Check
       'Content-Type':'application/json'
     }
 
-  getList:(url) ->
+  getList:(url, cb) ->
     self = @
     if not url
       url = self.url
@@ -24,21 +24,31 @@ class Check
     async.waterfall [
       (callback) ->
         request.get op, (err, res, body) ->
-          return txErr {err:err,fun:'getList',url:self.url}, cb if err
+          return txErr {err:err,fun:'getList',url:self.url}, callback if err
 
-          data = JSON.parse(body)
+          console.log "self.url+++++++++++++"
+          console.log "self.url", self.url
+          console.log "op url", op.url
+          console.log "self.url ++++++++++++"
+          try
+            data = JSON.parse(body)
+          catch err
+            console.log err, 123
+            return cb()
+
           callback(null, data)
 
       (data, callback) ->
-        if data.data.length
-          self.checkAdd data, callback
+        if data.data and data.data.length
+          self.checkAdd data, callback, cb
 
         else
           console.log data
+          cb()
     ]
 
 
-  checkAdd:(data, cb) ->
+  checkAdd:(data, cb, CB) ->
     self = @
     async.eachSeries data.data, (item, callback) ->
       Task.findOne {url:item.url}, (err, row) ->
@@ -53,7 +63,7 @@ class Check
     ,(err) ->
       return cb(err) if err
 
-      self.getList(data.paging.next)
+      self.getList(data.paging.next, CB)
 
 
   addTask:(data, cb) ->
