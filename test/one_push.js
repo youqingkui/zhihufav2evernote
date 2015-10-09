@@ -90,7 +90,7 @@
     }, function(rows, cb) {
 
       /* 创建 */
-      return async.eachSeries(rows, function(item, callback) {
+      return async.eachLimit(rows, 5, function(item, callback) {
         var p;
         p = new PushEvernote(item.url, noteStore, item.noteBook);
         return p.pushNote(callback);

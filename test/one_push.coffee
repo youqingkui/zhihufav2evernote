@@ -102,7 +102,7 @@ async.waterfall [
 
   (rows, cb) ->
     ### 创建 ###
-    async.eachSeries rows, (item, callback) ->
+    async.eachLimit rows, 5, (item, callback) ->
       p = new PushEvernote(item.url, noteStore, item.noteBook)
       p.pushNote callback
 
