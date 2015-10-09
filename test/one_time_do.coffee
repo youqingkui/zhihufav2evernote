@@ -96,7 +96,7 @@ async.waterfall [
 
   (cb) ->
 
-    async.eachSeries col, (item, callback) ->
+    async.eachLimit col, 4,  (item, callback) ->
       c = new Check(item.url, item.noteBook)
       c.getList(item.url, callback)
 

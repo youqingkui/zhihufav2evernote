@@ -72,7 +72,7 @@
 
   async.waterfall([
     function(cb) {
-      return async.eachSeries(col, function(item, callback) {
+      return async.eachLimit(col, 4, function(item, callback) {
         var c;
         c = new Check(item.url, item.noteBook);
         return c.getList(item.url, callback);
