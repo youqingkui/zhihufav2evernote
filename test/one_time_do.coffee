@@ -33,6 +33,15 @@ col = [
     noteBook:'a8ef249b-aa81-4f66-9d34-645aa79f1183'
   }
 
+  {
+    url:'https://api.zhihu.com/collections/19932288/answers' # 知乎--程序员进阶
+    noteBook:'de711cea-3fbe-4181-b03b-f9018415a40c'
+  }
+  {
+    url:'https://api.zhihu.com/collections/29001814/answers' # 知乎--品质生活馆
+    noteBook:'474f7f8e-13e2-4d29-850d-48e49ed14cc0'
+  }
+
 # 匪风 的收藏
 
   {
