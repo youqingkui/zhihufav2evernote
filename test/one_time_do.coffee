@@ -91,6 +91,10 @@ async.waterfall [
       c = new Check(item.url, item.noteBook)
       c.getList(item.url, callback)
 
+    ,(err) ->
+      return console.log err if err
+      cb()
+
   (cb) ->
     Task.find {status:1}, null, {sort: {_id: -1}}, (err, rows) ->
       return txErr {err:err, fun:'TaskFind'}, callback if err

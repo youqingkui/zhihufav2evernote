@@ -70,6 +70,11 @@
         var c;
         c = new Check(item.url, item.noteBook);
         return c.getList(item.url, callback);
+      }, function(err) {
+        if (err) {
+          return console.log(err);
+        }
+        return cb();
       });
     }, function(cb) {
       return Task.find({
