@@ -169,7 +169,10 @@ class PushEvernote
         request.get op, (err, res, body) ->
           return cb(err) if err
           mimeType = res.headers['content-type']
-          mimeType = mimeType.split(';')[0]
+          if not mimeType
+            mimeType = 'image/jpeg'
+          else
+            mimeType = mimeType.split(';')[0]
           callback(null, body, mimeType)
 
       enImg:['readImg', (callback, result) ->
