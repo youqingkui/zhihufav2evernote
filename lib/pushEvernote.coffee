@@ -118,11 +118,13 @@ class PushEvernote
 
     imgs = $("img")
     console.log "#{self.title} find img length => #{imgs.length}"
-    async.eachSeries imgs, (item, callback) ->
+    imgsIndex = 0
+    async.eachLimit imgs, 5, (item, callback) ->
       src = $(item).attr('data-actualsrc')
       if not src
         src = $(item).attr('src')
-
+      imgsIndex += 1
+      console.log "开始获取[#{imgsIndex}, #{self.title}, #{src}]"
       self.readImgRes src, (err, resource) ->
         return txErr {err:err, title:self.title, url:self.url,fun:'changeContent'}, cb if err
 

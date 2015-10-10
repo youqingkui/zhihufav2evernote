@@ -103,8 +103,8 @@ class Check
           console.log "######################################"
           cb()
 
-      else
-        cb()
+    else
+      cb()
 
 
 module.exports = Check
