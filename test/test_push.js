@@ -81,10 +81,10 @@
         noteBook: '4d95c614-b935-4f9e-bf88-081a859d0ea2'
       }
     ];
-    return col.forEach(function(item) {
+    return async.eachLimit(col, 5, function(item, callback) {
       var c;
       c = new Check(item.url, item.noteBook);
-      return c.getList();
+      return c.getList(item.url, callback);
     });
   });
 

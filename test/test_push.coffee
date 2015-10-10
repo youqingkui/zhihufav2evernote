@@ -97,9 +97,9 @@ schedule.scheduleJob rule1, () ->
 
   ]
 
-  col.forEach (item) ->
+  async.eachLimit col, 5,  (item, callback) ->
     c = new Check(item.url, item.noteBook)
-    c.getList()
+    c.getList(item.url, callback)
 
 
 schedule.scheduleJob rule2, () ->
