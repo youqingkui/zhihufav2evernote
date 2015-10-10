@@ -11,7 +11,7 @@ class Check
       'Content-Type':'application/json'
     }
 
-  getList:(url, cb) ->
+  getList:(url, CB) ->
     self = @
     if not url
       url = self.url
@@ -33,19 +33,21 @@ class Check
           try
             data = JSON.parse(body)
           catch err
-            console.log err, 123
-            return cb()
+            return txErr {err:err, fun:'getlist-jsonparse', body:body}, callback if err
 
           callback(null, data)
 
       (data, callback) ->
         if data.data and data.data.length
-          self.checkAdd data, callback, cb
+          self.checkAdd data, callback, CB
 
         else
           console.log data
-          cb()
+          CB()
     ]
+
+    ,() ->
+      CB()
 
 
   checkAdd:(data, cb, CB) ->
