@@ -4,7 +4,7 @@ Task = require('../models/task')
 txErr = require('../lib/txErr')
 
 class Check
-  constructor:(@url, @noteBook) ->
+  constructor:(@url, @noteBook, @recursive) ->
     @headers = {
       'User-Agent':'osee2unifiedRelease/332 CFNetwork/711.3.18 Darwin/14.0.0'
       'Authorization':'oauth 5774b305d2ae4469a2c9258956ea49'
@@ -42,7 +42,7 @@ class Check
           self.checkAdd data, callback, CB
 
         else
-          console.log data
+          console.log data.paging
           CB()
     ]
 
@@ -64,8 +64,10 @@ class Check
 
     ,(err) ->
       return cb(err) if err
-
-      self.getList(data.paging.next, CB)
+      if self.recursive
+        self.getList(data.paging.next, CB)
+      else
+        CB()
 
 
   addTask:(data, cb) ->
