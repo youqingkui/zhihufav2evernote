@@ -1,11 +1,11 @@
-PushEvernote = require('../lib/pushEvernote')
+PushEvernote = require('./lib/pushEvernote')
 async = require('async')
-Task = require('../models/task')
-txErr = require('../lib/txErr')
-noteStore = require('../lib/noteStore')
-UpdateEvernote = require('../lib/updateEvernote')
-Check = require('../lib/check')
-mongoose = require('../models/mongoose')
+Task = require('./models/task')
+txErr = require('./lib/txErr')
+noteStore = require('./lib/noteStore')
+UpdateEvernote = require('./lib/updateEvernote')
+Check = require('./lib/check')
+mongoose = require('./models/mongoose')
 
 
 col = [

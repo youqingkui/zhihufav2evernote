@@ -2,21 +2,21 @@
 (function() {
   var Check, PushEvernote, Task, UpdateEvernote, async, mongoose, noteStore, txErr;
 
-  PushEvernote = require('../lib/pushEvernote');
+  PushEvernote = require('./lib/pushEvernote');
 
   async = require('async');
 
-  Task = require('../models/task');
+  Task = require('./models/task');
 
-  txErr = require('../lib/txErr');
+  txErr = require('./lib/txErr');
 
-  noteStore = require('../lib/noteStore');
+  noteStore = require('./lib/noteStore');
 
-  UpdateEvernote = require('../lib/updateEvernote');
+  UpdateEvernote = require('./lib/updateEvernote');
 
-  Check = require('../lib/check');
+  Check = require('./lib/check');
 
-  mongoose = require('../models/mongoose');
+  mongoose = require('./models/mongoose');
 
   async.waterfall([
     function(cb) {
