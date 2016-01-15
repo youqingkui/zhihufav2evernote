@@ -6,50 +6,51 @@ noteStore = require('./lib/noteStore')
 UpdateEvernote = require('./lib/updateEvernote')
 Check = require('./lib/check')
 mongoose = require('./models/mongoose')
+schedule = require('node-schedule')
+
+schedule.scheduleJob '15,45 8-23 * * *', () ->
+  async.waterfall [
+    (cb) ->
+      Task.find {status:1}, null, {sort: {_id: -1}}, (err, rows) ->
+        return txErr {err:err, fun:'TaskFind'}, callback if err
+
+        cb(null, rows)
 
 
-async.waterfall [
-  (cb) ->
-    Task.find {status:1}, null, {sort: {_id: -1}}, (err, rows) ->
-      return txErr {err:err, fun:'TaskFind'}, callback if err
+    (rows, cb) ->
+      ### 创建 ###
+      async.eachSeries rows, (item, callback) ->
+        p = new PushEvernote(item.url, noteStore, item.noteBook)
+        p.pushNote callback
 
-      cb(null, rows)
-
-
-  (rows, cb) ->
-    ### 创建 ###
-    async.eachSeries rows, (item, callback) ->
-      p = new PushEvernote(item.url, noteStore, item.noteBook)
-      p.pushNote callback
-
-    ,() ->
-      console.log "#  all do #"
-      cb()
+      ,() ->
+        console.log "#  all do #"
+        cb()
 
 
-  (cb) ->
-    ### 更新 ###
-    async.waterfall [
-      (cb) ->
-        Task.find {status:3}, null, {sort: {_id: -1}}, (err, rows) ->
-          return txErr {err:err, fun:'TaskFind'}, callback if err
+    (cb) ->
+      ### 更新 ###
+      async.waterfall [
+        (cb) ->
+          Task.find {status:3}, null, {sort: {_id: -1}}, (err, rows) ->
+            return txErr {err:err, fun:'TaskFind'}, callback if err
 
-          cb(null, rows)
+            cb(null, rows)
 
 
-      (rows) ->
-        async.eachSeries rows, (item, callback) ->
-          if item.guid
-            u = new UpdateEvernote(item.url, noteStore, item.noteBook, item.guid, item)
-            u.upNote callback
+        (rows) ->
+          async.eachSeries rows, (item, callback) ->
+            if item.guid
+              u = new UpdateEvernote(item.url, noteStore, item.noteBook, item.guid, item)
+              u.upNote callback
 
-        ,() ->
-          console.log "# all do up #"
-          mongoose.connection.close()
+          ,() ->
+            console.log "# all do up #"
+#            mongoose.connection.close()
 
-    ]
+      ]
 
-]
+  ]
 
 
 
