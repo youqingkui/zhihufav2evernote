@@ -46,8 +46,9 @@
   async.waterfall([
     function(cb) {
       return async.eachLimit(col, 4, function(item, callback) {
-        var c;
-        c = new Check(item.url, item.noteBook, true);
+        var c, recursive;
+        recursive = Math.random() > 0.5 ? true : false;
+        c = new Check(item.url, item.noteBook, recursive);
         return c.getList(item.url, callback);
       }, function(err) {
         if (err) {

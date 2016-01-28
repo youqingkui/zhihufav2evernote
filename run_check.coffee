@@ -50,7 +50,8 @@ async.waterfall [
   (cb) ->
 
     async.eachLimit col, 4,  (item, callback) ->
-      c = new Check(item.url, item.noteBook, true)
+      recursive = if Math.random() > 0.5 then true else false
+      c = new Check(item.url, item.noteBook, recursive)
       c.getList(item.url, callback)
 
     ,(err) ->
