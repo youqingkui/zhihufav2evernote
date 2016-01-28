@@ -139,8 +139,7 @@ class PushEvernote
 
     ,() ->
       console.log "#{self.title} #{imgs.length} imgs down ok"
-      self.enContent = $.html({xmlMode:true, decodeEntities: false})
-
+      self.enContent = $.html({xmlMode:true, decodeEntities: true})
       cb()
 
 # 创建笔记

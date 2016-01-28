@@ -47,7 +47,7 @@
     function(cb) {
       return async.eachLimit(col, 4, function(item, callback) {
         var c;
-        c = new Check(item.url, item.noteBook, false);
+        c = new Check(item.url, item.noteBook, true);
         return c.getList(item.url, callback);
       }, function(err) {
         if (err) {

@@ -50,7 +50,7 @@ async.waterfall [
   (cb) ->
 
     async.eachLimit col, 4,  (item, callback) ->
-      c = new Check(item.url, item.noteBook, false)
+      c = new Check(item.url, item.noteBook, true)
       c.getList(item.url, callback)
 
     ,(err) ->

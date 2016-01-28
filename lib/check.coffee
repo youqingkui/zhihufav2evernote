@@ -11,7 +11,7 @@ class Check
       'Content-Type':'application/json'
     }
 
-  getList:(url, CB) ->
+  getList:(url, cb) ->
     self = @
     if not url
       url = self.url
@@ -39,18 +39,20 @@ class Check
 
       (data, callback) ->
         if data.data and data.data.length
-          self.checkAdd data, callback, CB
+          self.checkAdd data, callback, cb
 
         else
           console.log data.paging
-          CB()
+          callback()
     ]
 
     ,() ->
-      CB()
+      cb()
 
 
-  checkAdd:(data, cb, CB) ->
+
+
+  checkAdd:(data, cb, recursiveCB) ->
     self = @
     async.eachSeries data.data, (item, callback) ->
       Task.findOne {url:item.url}, (err, row) ->
@@ -65,9 +67,9 @@ class Check
     ,(err) ->
       return cb(err) if err
       if self.recursive
-        self.getList(data.paging.next, CB)
+        self.getList(data.paging.next, recursiveCB)
       else
-        CB()
+        cb()
 
 
   addTask:(data, cb) ->
@@ -113,9 +115,8 @@ class Check
 
 module.exports = Check
 
-#
 #url = 'https://api.zhihu.com/collections/29469118/answers'
-#noteBook = '44fcb5a8-e24c-406e-aa84-fc67354fb630'
-#c = new Check(url, noteBook)
+#noteBook = '735b3e76-e7f5-462c-84d0-bb1109bcd7dd'
+#c = new Check(url, noteBook, false)
 #c.getList()
 
