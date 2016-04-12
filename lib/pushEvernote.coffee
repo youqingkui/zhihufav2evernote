@@ -6,6 +6,7 @@ cheerio = require('cheerio')
 crypto = require('crypto')
 txErr = require('./txErr')
 Task = require('../models/task')
+instapush = require('./instapush_notify')
 
 class PushEvernote
   constructor:(@url, @noteStore, @noteBook) ->
@@ -156,6 +157,7 @@ class PushEvernote
         console.log "#{note.title} create ok"
         console.log "+++++++++++++++++++++++"
 
+        instapush(note.title)
         cb()
 
 

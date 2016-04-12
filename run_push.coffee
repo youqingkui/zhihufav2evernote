@@ -8,6 +8,10 @@ Check = require('./lib/check')
 mongoose = require('./models/mongoose')
 schedule = require('node-schedule')
 
+
+#c = schedule.scheduleJob '*/1 * * * *', () ->
+#  console.log('The answer to life, the universe, and everything!')
+
 schedule.scheduleJob '15,45 8-23 * * *', () ->
   async.waterfall [
     (cb) ->
@@ -28,29 +32,26 @@ schedule.scheduleJob '15,45 8-23 * * *', () ->
         cb()
 
 
-    (cb) ->
-      ### 更新 ###
-      async.waterfall [
-        (cb) ->
-          Task.find {status:3}, null, {sort: {_id: -1}}, (err, rows) ->
-            return txErr {err:err, fun:'TaskFind'}, callback if err
-
-            cb(null, rows)
-
-
-        (rows) ->
-          async.eachSeries rows, (item, callback) ->
-            if item.guid
-              u = new UpdateEvernote(item.url, noteStore, item.noteBook, item.guid, item)
-              u.upNote callback
-
-          ,() ->
-            console.log "# all do up #"
-#            mongoose.connection.close()
-
-      ]
+#    (cb) ->
+#      ### 更新 ###
+#      async.waterfall [
+#        (cb) ->
+#          Task.find {status:3}, null, {sort: {_id: -1}}, (err, rows) ->
+#            return txErr {err:err, fun:'TaskFind'}, callback if err
+#
+#            cb(null, rows)
+#
+#
+#        (rows) ->
+#          async.eachSeries rows, (item, callback) ->
+#            if item.guid
+#              u = new UpdateEvernote(item.url, noteStore, item.noteBook, item.guid, item)
+#              u.upNote callback
+#
+#          ,() ->
+#            console.log "# all do up #"
+##            mongoose.connection.close()
+#
+#      ]
 
   ]
-
-
-
