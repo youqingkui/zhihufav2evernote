@@ -92,7 +92,7 @@ class Check
 
 
   upTask:(data, row, cb) ->
-    console.log "already exits ==>", data.url, data.question.title
+#    console.log "already exits ==>", data.url, data.question.title
 
     if row.updated_time and data.updated_time != row.updated_time
         row.updated_time = data.updated_time
